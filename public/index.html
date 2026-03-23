@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popkid SDK Tester</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: white; }
+    </style>
+</head>
+<body class="p-4 md:p-10 font-sans">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                Popkid SDK Explorer
+            </h1>
+            <p class="text-gray-400 mt-2">Test your AI and Downloader endpoints live</p>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="glass p-6 rounded-2xl border border-white/10 shadow-xl">
+                <label class="block text-sm font-medium mb-2 text-blue-300">Select Endpoint</label>
+                <select id="endpoint" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="deepseek">Deepseek AI</option>
+                    <option value="tiktok">TikTok Downloader</option>
+                    <option value="instagram">Instagram Downloader</option>
+                    <option value="screenshot">Web Screenshot</option>
+                </select>
+
+                <label class="block text-sm font-medium mb-2 text-blue-300">Input Value (Prompt or URL)</label>
+                <textarea id="inputVal" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 mb-6 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Enter text here..."></textarea>
+                
+                <button onclick="runTest()" id="btn" class="w-full bg-blue-600 hover:bg-blue-500 transition-all text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-900/20">
+                    Run Request
+                </button>
+            </div>
+
+            <div class="glass p-6 rounded-2xl border border-white/10 shadow-xl flex flex-col">
+                <label class="block text-sm font-medium mb-2 text-green-400">Response Output</label>
+                <pre id="output" class="bg-black/40 rounded-lg p-4 h-full overflow-auto text-xs text-green-300 border border-white/5 whitespace-pre-wrap">Waiting for input...</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function runTest() {
+            const btn = document.getElementById('btn');
+            const output = document.getElementById('output');
+            const endpoint = document.getElementById('endpoint').value;
+            const inputVal = document.getElementById('inputVal').value;
+            const apiKey = 'qasim-dev'; // Default test key
+
+            if (!inputVal) return alert("Please enter something!");
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+            output.innerText = "Connecting to Popkid API...";
+
+            let url = '';
+            if (endpoint === 'deepseek') url = `https://api.qasimdev.dpdns.org/api/openrouter/deepseek?prompt=${encodeURIComponent(inputVal)}&apiKey=${apiKey}`;
+            if (endpoint === 'tiktok') url = `https://api.qasimdev.dpdns.org/api/tiktok/download?url=${encodeURIComponent(inputVal)}&apiKey=${apiKey}`;
+            if (endpoint === 'instagram') url = `https://api.qasimdev.dpdns.org/api/instagram/download?url=${encodeURIComponent(inputVal)}&apiKey=${apiKey}`;
+            if (endpoint === 'screenshot') url = `https://api.qasimdev.dpdns.org/api/screenshot/take?url=${encodeURIComponent(inputVal)}&apiKey=${apiKey}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                output.innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                output.innerText = "Error: " + err.message;
+            } finally {
+                btn.innerText = "Run Request";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

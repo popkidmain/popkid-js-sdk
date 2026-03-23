@@ -1,7 +1,7 @@
 {
   "name": "@popkid/sdk",
   "version": "1.0.0",
-  "description": "Universal SDK for Popkid REST API",
+  "description": "Universal TypeScript SDK for the Popkid REST API. Supports Node.js, Browsers, and Edge runtimes.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -16,13 +16,31 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
+  "keywords": [
+    "popkid",
+    "api",
+    "sdk",
+    "typescript",
+    "downloader",
+    "ai",
+    "deepseek",
+    "groq",
+    "image-processing"
+  ],
+  "author": "Popkid Dev",
+  "license": "MIT",
   "devDependencies": {
-    "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "@types/node": "^20.11.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
   }
 }
